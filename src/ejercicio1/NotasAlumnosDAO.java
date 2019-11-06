@@ -19,34 +19,21 @@ public class NotasAlumnosDAO {
 	}
 
 	public void restarNotaPorFaltas() throws SQLException {
-		String dni, asignatura;
-		int nota;
-		ResultSet resultAlumnos, resultNotas;
-		Statement sentenciaAlumnos, sentenciaNota, sentenciaActualizar;
+		String dni;
+		ResultSet resultAlumnos;
+		Statement sentenciaAlumnos,  sentenciaActualizar;
 
 		sentenciaAlumnos = conexion.createStatement();
-		sentenciaNota = conexion.createStatement();
 		sentenciaActualizar = conexion.createStatement();
 		
 		resultAlumnos = sentenciaAlumnos.executeQuery("select * from alumnos where faltas > 20");
 
 		while (resultAlumnos.next()) {
 			dni = resultAlumnos.getString("dni");
-			
 
-			resultNotas = sentenciaNota.executeQuery("select * from notas where dni = '" 
-					+ dni + "'");
-
-			while (resultNotas.next()) {
-
-				nota = resultNotas.getInt("nota");
-				asignatura = resultNotas.getString("asig");
-
-				sentenciaActualizar.executeUpdate(
-						"update notas set nota = " + (nota -1) + " where dni = '" + dni + 
-						"' and nota > 0 and asig = '" + asignatura + "'");
-			}
-
+			sentenciaActualizar.executeUpdate(
+					"update notas set nota = nota-1 where dni = '" + dni + 
+					"' and nota > 0");
 		}
 
 		sentenciaAlumnos.close();
