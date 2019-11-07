@@ -8,14 +8,11 @@ import java.sql.Statement;
 
 public class NotasAlumnosDAO {
 
-	private static final String URL = "jdbc:sqlite:db/Ejercicio1/BDEjercicio1.db";
-	private static final String DRIVER = "org.sqlite.JDBC";
 	private Connection conexion;
 
-	public NotasAlumnosDAO() throws SQLException, ClassNotFoundException {
-		Class.forName(DRIVER);
-		conexion = DriverManager.getConnection(URL);
-
+	public NotasAlumnosDAO(Connection conexion) throws SQLException, ClassNotFoundException {
+		this.conexion = conexion;
+		
 	}
 
 	public void restarNotaPorFaltas() throws SQLException {
@@ -37,6 +34,7 @@ public class NotasAlumnosDAO {
 		}
 
 		sentenciaAlumnos.close();
+		sentenciaActualizar.close();
 	}
 
 	public String mostrarNotas() throws SQLException {
@@ -57,8 +55,5 @@ public class NotasAlumnosDAO {
 
 	}
 
-	public void cerrarConexion() throws SQLException {
-		if (conexion != null)
-			conexion.close();
-	}
+
 }
