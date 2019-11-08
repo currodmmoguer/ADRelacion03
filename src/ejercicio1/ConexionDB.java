@@ -8,6 +8,7 @@ public class ConexionDB {
 	
 	private static final String URL = "jdbc:sqlite:db/Ejercicio1/BDEjercicio1.db";
 	private static final String DRIVER = "org.sqlite.JDBC";
+	
 	private static Connection conexion;
 	
 	private ConexionDB() throws ClassNotFoundException, SQLException {

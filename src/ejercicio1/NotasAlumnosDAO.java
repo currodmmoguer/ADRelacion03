@@ -8,11 +8,20 @@ import java.sql.Statement;
 
 public class NotasAlumnosDAO {
 
-	private Connection conexion;
+	private Connection conexion = null;
+	private static NotasAlumnosDAO dao = null;
 
-	public NotasAlumnosDAO(Connection conexion) throws SQLException, ClassNotFoundException {
-		this.conexion = conexion;
+	private NotasAlumnosDAO() throws SQLException, ClassNotFoundException {
+		this.conexion = ConexionDB.getConexion();
 		
+	}
+	
+	public static NotasAlumnosDAO getDao() throws ClassNotFoundException, SQLException {
+		if (dao == null) {
+			dao = new NotasAlumnosDAO();
+		}
+		
+		return dao;
 	}
 
 	public void restarNotaPorFaltas() throws SQLException {
