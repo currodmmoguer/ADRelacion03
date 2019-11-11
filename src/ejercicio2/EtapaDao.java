@@ -43,6 +43,8 @@ public class EtapaDao {
 		return insertado;
 	}
 	
+	
+	
 	private int obtenerDorsal(String nombre) throws SQLException {
 		Statement sentenciaDorsal = conexion.createStatement();
 		ResultSet resultDorsal = sentenciaDorsal.executeQuery("select * from ciclista where nombre='" + nombre + "'");
@@ -60,6 +62,17 @@ public class EtapaDao {
 		result.next();
 		
 		return result.getInt(1);
+		
+	}
+
+	public void insertarMaillotMontanna(String nombreMaillot) throws SQLException {
+		PreparedStatement sentenciaInsertar = conexion.prepareStatement("insert into llevar values (?, ?, ?)");
+		sentenciaInsertar.setInt(1, obtenerDorsal(nombreMaillot));
+		sentenciaInsertar.setInt(2, obtenerUltimaEtapa());
+		sentenciaInsertar.setString(3, "MMO");
+		sentenciaInsertar.executeUpdate();
+		sentenciaInsertar.close();
+		
 		
 	}
 

@@ -22,9 +22,9 @@ public class Principal {
 
 	}
 
-	private static void addNuevaEtapa(EtapaDao daoEtapa) {
+	private static void addNuevaEtapa(EtapaDao daoEtapa) throws SQLException {
 		int kms;
-		String salida, llegada, nombre;
+		String salida, llegada, nombre, nombreMaillot;
 		try {
 		System.out.println("Introduce los kilómetros de la etapa");
 		kms = Integer.parseInt(teclado.nextLine());
@@ -40,8 +40,13 @@ public class Principal {
 		
 		
 		daoEtapa.nuevaEtapa(kms, salida, llegada, nombre);
-		} catch (SQLException e) {
-			System.out.println("No se ha podido introducir la etapa");
+		
+		System.out.println("¿Cuál ciclista ha llevado el maillot de montaña (MMO)?");
+		nombreMaillot = teclado.nextLine();
+		
+		daoEtapa.insertarMaillotMontanna(nombreMaillot);
+		
+		
 		} catch (NumberFormatException e) {
 			System.err.println("Formato incorrecto");
 		}
