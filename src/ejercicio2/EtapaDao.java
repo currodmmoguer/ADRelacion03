@@ -1,79 +1,55 @@
 package ejercicio2;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
-
 public class EtapaDao {
-	
-	private Connection conexion;
+
 	private static EtapaDao dao;
-	
+
 	private EtapaDao() throws SQLException {
-		conexion = ConexionDB.getConexion();
 	}
-	
+
 	public static EtapaDao getEtapaDao() throws SQLException {
 		if (dao == null)
 			dao = new EtapaDao();
-		
+
 		return dao;
 	}
-	
-	public boolean nuevaEtapa(int kms, String salida, String llegada, String ganador) throws SQLException {
-		boolean insertado = true;
-		
-		PreparedStatement sentenciaInsertar = conexion.prepareStatement("insert into etapa values (?, ?, ?, ?, ?)");
-		
-		
+
+	public static int nuevaEtapa(int kms, String salida, String llegada, String ganador) throws SQLException {
+
+		PreparedStatement sentenciaInsertar = ConexionDB.getConexion()
+				.prepareStatement("insert into etapa values (?, ?, ?, ?, ?)");
+
 		sentenciaInsertar.setInt(1, obtenerUltimaEtapa() + 1);
 		sentenciaInsertar.setInt(2, kms);
 		sentenciaInsertar.setString(3, salida);
 		sentenciaInsertar.setString(4, llegada);
-		sentenciaInsertar.setInt(5, obtenerDorsal(ganador));
+		sentenciaInsertar.setInt(5, CiclistaDao.obtenerDorsal(ganador));
 
 		sentenciaInsertar.executeUpdate();
-		
-		sentenciaInsertar.close();
-		
-		return insertado;
-	}
-	
-	
-	
-	private int obtenerDorsal(String nombre) throws SQLException {
-		Statement sentenciaDorsal = conexion.createStatement();
-		ResultSet resultDorsal = sentenciaDorsal.executeQuery("select * from ciclista where nombre='" + nombre + "'");
-		resultDorsal.next();
-		int dorsal = resultDorsal.getInt("dorsal");
-		sentenciaDorsal.close();
 
-		return dorsal;
+		sentenciaInsertar.close();
+
+		return obtenerUltimaEtapa();
 	}
-	
-	private int obtenerUltimaEtapa() throws SQLException {
-		Statement sentencia = conexion.createStatement();
+
+	private static int obtenerUltimaEtapa() throws SQLException {
+		Statement sentencia;
+		int netapa = -1;
+
+		sentencia = ConexionDB.getConexion().createStatement();
 		ResultSet result = sentencia.executeQuery("select max(netapa) from etapa");
-		
 		result.next();
+		netapa = result.getInt(1);
 		
-		return result.getInt(1);
-		
-	}
+		sentencia.close();
 
-	public void insertarMaillotMontanna(String nombreMaillot) throws SQLException {
-		PreparedStatement sentenciaInsertar = conexion.prepareStatement("insert into llevar values (?, ?, ?)");
-		sentenciaInsertar.setInt(1, obtenerDorsal(nombreMaillot));
-		sentenciaInsertar.setInt(2, obtenerUltimaEtapa());
-		sentenciaInsertar.setString(3, "MMO");
-		sentenciaInsertar.executeUpdate();
-		sentenciaInsertar.close();
-		
-		
+		return netapa;
+
 	}
 
 }
