@@ -10,6 +10,7 @@ public class Principal {
 	public static void main(String[] args) {
 
 		try {
+			ConexionDB.getConexion().setAutoCommit(false);
 			addNuevaEtapa();
 			ConexionDB.hacerCommit();
 			ConexionDB.getConexion().close();
@@ -36,7 +37,7 @@ public class Principal {
 			System.out.println("Introduce el nombre del ciclista ganador:");
 			nombre = teclado.nextLine();
 			
-			ConexionDB.getConexion().setAutoCommit(false);
+			
 
 			netapa = EtapaDao.nuevaEtapa(kms, salida, llegada, nombre);
 
