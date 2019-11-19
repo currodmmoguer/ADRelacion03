@@ -1,4 +1,4 @@
-package ejercicio4;
+package ejercicio3;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
